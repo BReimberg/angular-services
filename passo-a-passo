@@ -1,0 +1,52 @@
+===========================================================
+            TRABALHANDO COM SERVICES NO ANGULAR
+===========================================================
+
+- Copiar a tag <router-outlet></router-outlet> do arquivo app.component.html
+colar no arquivo app.component.ts;
+
+- Trocar templateUrls por template e adicionar a tag <router-outlet></router-outlet>;
+
+- Depois de adicionar a tag ao arquivo TS pode excluir o arquivo app.component.html;
+
+- Criar uma pasta card dentro da pasta de components:
+ng g c components/card
+
+- Copiar o selector do arquivo card.component.ts e colar no arquivo app.component.ts
+
+- Criar o card no arquivo card.component.html;
+
+- Estilizar o card no arquivo card.component.css;
+
+- No arquivo card.component.ts criar a propriedade name dentro de :
+
+export class CardComponent implements OnInit
+
+  //propriedades:
+  name: string = "Bulbasaur"
+
+- No arquivo card.component.html fazer uma interpolação onde está especificado o nome:
+
+<div class="card__name">
+    <h3>Charmander</h3>
+  </div>
+
+MODIFICADO:
+
+<div class="card__name">
+    <h3>{{ name }}</h3>
+  </div>
+
+- No arquivo card.component.ts criar a propriedade attributesType:
+
+ attributesTypes: string[] = ['Fire', 'Rock']
+
+- No arquivo card.component.html fazer um ngFor:
+
+<div class="card__stats">
+    <span class="card__stats__type"
+    *ngFor="let type of attributesTypes">
+    {{ type }}
+    </span>
+  </div>
+
