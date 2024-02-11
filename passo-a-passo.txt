@@ -2,6 +2,9 @@
             TRABALHANDO COM SERVICES NO ANGULAR
 ===========================================================
 
+            ===== INTRODUÇÃO AO SERVICES ANGULAR =====
+-----------------------------------------------------------
+
 - Copiar a tag <router-outlet></router-outlet> do arquivo app.component.html
 colar no arquivo app.component.ts;
 
@@ -50,3 +53,192 @@ MODIFICADO:
     </span>
   </div>
 
+-------------------------------------------------------------
+              ===== SERVICES NA PRÁTICA =====
+-------------------------------------------------------------
+*Obs: environments guarda valores de variáveis;
+
+- Copiar o link principal da PokeApi https://pokeapi.co/api/v2/
+- No arquivo environments.ts colar o link da PokeApi:
+
+export const environment = {
+  production: true,
+  pokeApi: 'https://pokeapi.co/api/v2/pokemon/'
+};
+- Criar pasta: ng g s services/pokemon
+- No arquivo card.component.ts adicionar ao construtor:
+
+constructor(
+    private service:PokemonService
+  ) {}
+
+- Verificar se foi importado PokemonService automaticamente,
+se não adicionar manualmente no começo do arquivo;
+- No arquivo card.component.ts adicionar ao ngOnInit:
+
+ngOnInit(): void {
+    this.service.getPokemon("Bulbasaur")
+  }
+
+- No arquivo pokemon.service.ts importar o environment:
+
+import { environment } from 'src/environments/environment'
+
+- No arquivo pokemon.service.ts adicionar ao export class PokemonService:
+
+private baseUrl:string = ""
+
+  constructor() {
+    this.baseUrl = environment.pokeApi
+   }
+
+- No arquivo app.module.ts importar:
+
+import { HttpClientModule } from '@angular/common/http';
+
+- Adicionar ao NgModule na área de imports o HttpClientModule;
+- No arquivo pokemon.service.ts fazer uma injeção de dependência:
+
+constructor(
+    private http:HttpClient
+  )
+
+- Verificar se o HttpClient foi importado automaticamente,
+se não adicionar manualmente: import { HttpClient } from '@angular/common/http';
+- No arquivo pokemon.service.ts adicionar ao getPokemon:
+
+  getPokemon(pokemonName:string){
+   this.pokeData = this.http.get(`${this.baseUrl}${pokemonName}`)
+   console.log(this.pokeData)
+  }
+
+- No arquivo pokemon.service.ts adicionar o Observable:
+
+getPokemon(pokemonName:string):Observable<>{
+ this.pokeData = this.http.get(`${this.baseUrl}${pokemonName}`)
+   return this.pokeData
+}
+
+- Verificar se o Observable foi importado automaticamente,
+se não adicionar manualmente: import { Observable } from 'rxjs';
+- Criar uma pasta dentro de app chamada models;
+- Criar o arquivo pokemonData.ts dentro da pasta models
+- No arquivo pokemon.service.ts importar: import { PokemonData } from '../models/pokemonData';
+- No arquivo pokemon.service.ts adicionar PokemonData ao Observable:
+
+  getPokemon(pokemonName:string):Observable<PokemonData>{
+   this.pokeData = this.http.get<PokemonData>(`${this.baseUrl}${pokemonName}`)
+   return this.pokeData
+  }
+
+- No arquivo pokemon.service.ts modificar no export class PokemonService:
+
+private pokeData:any
+
+MODIFICADO:
+private pokeData:PokemonData | any
+
+- No arquivo card.component.ts adicionar ao ngOnInit o subscribe:
+
+  ngOnInit(): void {
+    this.service.getPokemon("bulbasaur").subscribe({
+      next: (res) => {
+        console.log(res)
+        console.log(res.id)
+        console.log(res.name)
+        console.log(res.sprites.front_default)
+        console.log(res.types)
+      },
+      error: (err) => console.log(err)
+    })
+  }
+
+- No arquivo pokemonData.ts adicionar:
+
+sprites: {
+    front_default:string
+  }
+types:[]
+
+- No arquivo card.component.ts criar um objeto:
+
+pokemon?:PokemonData
+
+- Verificar se PokemonData foi importado automaticamente,
+se não importar manualmente;
+
+- No arquivo card.component.ts modificar o next: (res) para:
+
+next: (res) => {
+
+        this.pokemon = {
+          id: res.id,
+          name: res.name,
+          sprites: res.sprites,
+          types: res.types
+        },
+error: (err) => console.log(err)
+}
+
+- No arquivo card.component.html alterar para:
+
+<div class="card">
+  <div class="card__name">
+    <h3>{{ pokemon.name }}</h3>
+  </div>
+  <div class="card__body">
+    <img [src]="pokemon.sprites.front_default" alt="pokémon">
+  </div>
+  <div class="card__stats">
+    <span class="card__stats__type"
+    *ngFor="let type of attributesTypes">
+    {{ type }}
+    </span>
+  </div>
+</div>
+
+- No arquivo card.component.ts excluir:
+
+  name: string = "bulbasaur"
+  attributesTypes: string[] = ['Fire', 'Rock']
+
+- No arquivo card.component.ts alterar no campo export:
+
+pokemon:PokemonData
+
+- Adicionar no campo do contructor:
+
+  constructor(private service:PokemonService) {
+    this.pokemon = {id:0, name:'', sprites:{front_default: ''}, types:[]}
+  }
+
+- No arquivo pokemonData.ts adicionar ao types:
+
+  types:{
+    slot: number
+    ​​type: {
+      ​name: string
+      ​​url: string
+    }
+  }[]
+
+- No arquivo app.module.ts adicionar ao inports FormsModule;
+- No arquivo card.component.html alterar para:
+
+<div class="card">
+  <input type="text" (input)="getPokemon($any($event.target).value)">
+  <div class="card__name">
+    <h3>{{ pokemon.name }}</h3>
+  </div>
+  <div class="card__body">
+    <img [src]="pokemon.sprites.front_default" alt="pokémon">
+  </div>
+  <div class="card__stats">
+    <span class="card__stats__type"
+    *ngFor="let t of pokemon.types">
+    {{ t.type.name }}
+    </span>
+  </div>
+</div>
+
+-

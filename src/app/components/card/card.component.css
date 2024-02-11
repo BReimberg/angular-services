@@ -17,11 +17,17 @@
 
 .card__body {
   background-color: #616161;
-  width: 90%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
-  height: 70%;
+  height: 62%;
   border-radius: 10px;
+}
+
+.card__body {
+  display: flex;
+  align-items: center;
+  justify-content: center ;
 }
 
 .card__stats {
@@ -39,3 +45,5 @@
   margin-right: 5px;
   font-weight: bold
 }
+
+
