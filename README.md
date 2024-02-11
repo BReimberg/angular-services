@@ -9,5 +9,12 @@
 - Estilizando o componente
 - Desacoplando o componente e deixando-o inteligente
 
-### IN PROGRESS...
-<img src="https://i.pinimg.com/originals/9d/00/79/9d0079b9f31783556bd48f128ebd9370.gif">
+### Services na Prática
+- Entendendo o papel do service
+- A anatomia de um service
+- Como injetar um service
+- Service convesnando com environment
+- Trabalhando com módulo HTTP
+- Observables
+- Trabalhando com subscribe
+- Tipando os dados

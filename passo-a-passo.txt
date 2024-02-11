@@ -241,4 +241,18 @@ pokemon:PokemonData
   </div>
 </div>
 
--
+- No arquivo card.component.css adicionar:
+
+.card__body {
+  display: flex;
+  align-items: center;
+  justify-content: center ;
+}
+
+- No arquivo card.component.ts alterar ngOnInit para:
+
+ ngOnInit(): void {
+    this.getPokemon('pikachu')
+  }
+
+*obs: o pokemon inicial será sempre o pikachu.
